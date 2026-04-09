@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-Club Portföy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080c14;
+      --surface:   #0f172a;
+      --border:    #1e293b;
+      --text:      #f1f5f9;
+      --muted:     #475569;
+      --subtle:    #1e293b;
+      --green:     #10b981;
+      --green-dim: rgba(16, 185, 129, 0.12);
+      --red:       #ef4444;
+      --red-dim:   rgba(239, 68, 68, 0.12);
+      --blue:      #3b82f6;
+      --blue-dim:  rgba(59, 130, 246, 0.12);
+      --mono:      'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px 16px 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .logo-text em {
+      color: var(--blue);
+      font-style: normal;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .badge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      background: var(--blue-dim);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 16px;
+    }
+
+    /* ── TABLE HEADER ── */
+    .col-heads {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr 1fr;
+      padding: 0 14px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .col-heads span:not(:first-child) { text-align: right; }
+
+    /* ── ROWS ── */
+    .rows { display: flex; flex-direction: column; gap: 5px; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr 1fr;
+      align-items: center;
+      padding: 13px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color 0.15s;
+    }
+
+    .row:hover { border-color: #334155; }
+
+    .cell-ticker {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .cell-price {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: right;
+    }
+
+    .cell-daily {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: right;
+      padding: 3px 7px;
+      border-radius: 5px;
+      justify-self: end;
+    }
+
+    .cell-daily.pos { color: var(--green); background: var(--green-dim); }
+    .cell-daily.neg { color: var(--red);   background: var(--red-dim);   }
+    .cell-daily.neu { color: var(--muted); }
+
+    .cell-pnl {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .cell-pnl.pos { color: var(--green); }
+    .cell-pnl.neg { color: var(--red);   }
+    .cell-pnl.neu { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #334155;
+    }
+
+    .footer::before,
+    .footer::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── ERROR / LOADING ── */
+    .state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .state.error { color: var(--red); }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="state">Yükleniyor…</div>
+  </div>
+
+  <script>
+    function classify(val) {
+      if (val === null || val === undefined || val === 'N/A') return 'neu';
+      const n = typeof val === 'string' ? parseFloat(val) : val;
+      if (isNaN(n)) return val.startsWith('+') ? 'pos' : val.startsWith('-') ? 'neg' : 'neu';
+      return n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu';
+    }
+
+    function fmtDaily(val) {
+      if (val === null || val === undefined || val === 'N/A') return 'N/A';
+      const n = typeof val === 'number' ? val : parseFloat(val);
+      if (isNaN(n)) return 'N/A';
+      return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+    }
+
+    function fmtPrice(val) {
+      if (!val || val === 'N/A') return 'N/A';
+      const n = parseFloat(val);
+      if (isNaN(n)) return val;
+      return '$' + n.toFixed(2);
+    }
+
+    function render(data) {
+      const rows = data.items.map(item => {
+        const dc = classify(item.daily);
+        const pc = classify(item.pnl);
+        return `
+          <div class="row">
+            <div class="cell-ticker">${item.ticker}</div>
+            <div class="cell-price">${fmtPrice(item.price)}</div>
+            <div class="cell-daily ${dc}">${fmtDaily(item.daily)}</div>
+            <div class="cell-pnl ${pc}">${item.pnl || 'N/A'}</div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="logo">
+            <div class="logo-text">D<em>-</em>CLUB</div>
+            <div class="logo-sub">Model Portföy</div>
+          </div>
+          <div class="badge-wrap">
+            <div class="badge">${data.label}</div>
+            <div class="date">${data.date}</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="col-heads">
+          <span>Ticker</span><span>Fiyat</span><span>Günlük</span><span>PnL</span>
+        </div>
+        <div class="rows">${rows}</div>
+        <div class="footer">D-Club · dolarca</div>
+      `;
+    }
+
+    try {
+      const hash = window.location.hash.slice(1);
+      if (!hash) throw new Error('Veri parametresi eksik');
+
+      // base64url → base64 → UTF-8 bytes → JSON string
+      const b64 = hash.replace(/-/g, '+').replace(/_/g, '/');
+      const raw = atob(b64);
+      const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
+      const json = new TextDecoder('utf-8').decode(bytes);
+      render(JSON.parse(json));
+    } catch (err) {
+      document.getElementById('app').innerHTML =
+        `<div class="state error">Rapor yüklenemedi.<br><small>${err.message}</small></div>`;
+    }
+  </script>
+</body>
+</html>
